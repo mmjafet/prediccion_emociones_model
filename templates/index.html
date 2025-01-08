@@ -19,6 +19,9 @@
             height: auto;
             margin-top: 20px;
         }
+        #loading-spinner {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -31,6 +34,9 @@
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
         <img id="image-preview" src="#" alt="Image Preview" class="d-none">
+        <div id="loading-spinner" class="spinner-border text-primary mt-3" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
         <p id="result" class="mt-3"></p>
     </div>
 
@@ -50,6 +56,10 @@
             };
             reader.readAsDataURL(fileInput.files[0]);
 
+            // Show loading spinner
+            const spinner = document.getElementById('loading-spinner');
+            spinner.style.display = 'block';
+
             // Send the image to the server
             const response = await fetch('/predict', {
                 method: 'POST',
@@ -58,6 +68,9 @@
 
             const result = await response.json();
             document.getElementById('result').innerText = `Emotion: ${result.emotion}`;
+
+            // Hide loading spinner
+            spinner.style.display = 'none';
         });
     </script>
 
